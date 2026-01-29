@@ -134,6 +134,16 @@ Backend services communicate asynchronously using **Kafka** for scalable event h
 - Environment-based configuration
 - CI-ready project structure
 
+### Git hooks (Husky)
+
+Pre-commit hooks run **lint** and **build** for the frontend before each commit. To install hooks, run from the repo root:
+
+```bash
+npm install
+```
+
+This runs the `prepare` script and configures Git to use `.husky/` for hooks. The pre-commit hook runs `streamflow-fe` lint and build; the commit is blocked if either fails.
+
 ---
 
 ## 🎥 Streaming Technology
