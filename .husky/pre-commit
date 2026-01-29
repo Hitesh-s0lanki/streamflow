@@ -1,0 +1,1 @@
+cd streamflow-fe && npm run lint && npm run build
