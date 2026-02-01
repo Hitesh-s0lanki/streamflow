@@ -15,18 +15,17 @@ import { cn } from "@/lib/utils"
 
 function ResizablePanelGroup({
   className,
-  direction,
-  orientation,
+  orientation = "horizontal",
   ...props
-}: GroupProps & { direction?: "horizontal" | "vertical" }) {
-  const resolvedOrientation = orientation ?? direction ?? "horizontal"
+}: GroupProps) {
   return (
     <Group
       data-slot="resizable-panel-group"
-      data-panel-group-direction={resolvedOrientation}
-      orientation={resolvedOrientation}
+      data-panel-group-direction={orientation}
+      orientation={orientation}
       className={cn(
-        "flex h-full w-full data-[panel-group-direction=vertical]:flex-col",
+        "group flex h-full w-full",
+        orientation === "vertical" && "flex-col",
         className
       )}
       {...props}
@@ -49,7 +48,7 @@ function ResizableHandle({
     <Separator
       data-slot="resizable-handle"
       className={cn(
-        "bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden data-[panel-group-direction=vertical]:h-px data-[panel-group-direction=vertical]:w-full data-[panel-group-direction=vertical]:after:left-0 data-[panel-group-direction=vertical]:after:h-1 data-[panel-group-direction=vertical]:after:w-full data-[panel-group-direction=vertical]:after:translate-x-0 data-[panel-group-direction=vertical]:after:-translate-y-1/2 [&[data-panel-group-direction=vertical]>div]:rotate-90",
+        "bg-border focus-visible:ring-ring relative flex w-px items-center justify-center after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:outline-hidden group-data-[panel-group-direction=vertical]:h-px group-data-[panel-group-direction=vertical]:w-full group-data-[panel-group-direction=vertical]:after:left-0 group-data-[panel-group-direction=vertical]:after:h-1 group-data-[panel-group-direction=vertical]:after:w-full group-data-[panel-group-direction=vertical]:after:translate-x-0 group-data-[panel-group-direction=vertical]:after:-translate-y-1/2 group-data-[panel-group-direction=vertical]:[&>div]:rotate-90",
         className
       )}
       {...props}

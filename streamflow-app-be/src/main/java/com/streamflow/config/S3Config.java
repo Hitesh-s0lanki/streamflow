@@ -1,0 +1,81 @@
+package com.streamflow.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.S3Configuration;
+
+import java.net.URI;
+
+/**
+ * S3 configuration. Creates an S3Client when AWS S3 is enabled via
+ * <code>streamflow.aws.s3.enabled=true</code> and required properties are set.
+ */
+@Configuration
+public class S3Config {
+
+    private static final Logger log = LoggerFactory.getLogger(S3Config.class);
+
+    @Value("${streamflow.aws.s3.region:us-east-1}")
+    private String region;
+
+    @Value("${streamflow.aws.s3.endpoint-override:}")
+    private String endpointOverride;
+
+    @Value("${streamflow.aws.s3.access-key-id:}")
+    private String accessKeyId;
+
+    @Value("${streamflow.aws.s3.secret-access-key:}")
+    private String secretAccessKey;
+
+    @Value("${streamflow.aws.s3.path-style-access:false}")
+    private boolean pathStyleAccess;
+
+    @Bean
+    @ConditionalOnProperty(name = "streamflow.aws.s3.enabled", havingValue = "true")
+    public S3Client s3Client() {
+        S3ClientBuilder builder = S3Client.builder()
+                .region(Region.of(region));
+
+        AwsCredentialsProvider credentials = resolveCredentials();
+        if (credentials != null) {
+            builder.credentialsProvider(credentials);
+        }
+
+        if (endpointOverride != null && !endpointOverride.isBlank()) {
+            try {
+                builder.endpointOverride(URI.create(endpointOverride));
+            } catch (Exception e) {
+                log.warn("Invalid S3 endpoint override '{}': {}", endpointOverride, e.getMessage());
+            }
+        }
+
+        if (pathStyleAccess) {
+            builder.serviceConfiguration(
+                    S3Configuration.builder().pathStyleAccessEnabled(true).build());
+        }
+
+        S3Client client = builder.build();
+        log.info("S3 client configured: region={}, endpointOverride={}", region,
+                endpointOverride != null && !endpointOverride.isBlank() ? endpointOverride : "default");
+        return client;
+    }
+
+    private AwsCredentialsProvider resolveCredentials() {
+        if (accessKeyId != null && !accessKeyId.isBlank() && secretAccessKey != null && !secretAccessKey.isBlank()) {
+            return StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(accessKeyId, secretAccessKey));
+        }
+        return DefaultCredentialsProvider.create();
+    }
+}
