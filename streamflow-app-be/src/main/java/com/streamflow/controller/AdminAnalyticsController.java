@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 
 /**
- * Admin: analytics overview (with ingestion readiness), rebuild. All under /api/admin/analytics.
+ * Admin: analytics overview (with ingestion readiness), rebuild. All under
+ * /api/admin/analytics.
  */
 @RestController
 @RequestMapping("/api/admin/analytics")
@@ -24,7 +25,8 @@ public class AdminAnalyticsController {
     }
 
     /**
-     * Analytics overview for admin: same as public overview plus ingestion readiness count.
+     * Analytics overview for admin: same as public overview plus ingestion
+     * readiness count.
      */
     @GetMapping("/overview")
     public ResponseEntity<AdminAnalyticsOverviewResponse> getOverview(

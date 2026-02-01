@@ -68,7 +68,10 @@ public class ContentService {
         return toDetailResponse(content, true);
     }
 
-    /** Admin: list all content (including DRAFT) with filters and paging. Order: createdAt DESC. */
+    /**
+     * Admin: list all content (including DRAFT) with filters and paging. Order:
+     * createdAt DESC.
+     */
     @Transactional(readOnly = true)
     public PagedResponse<AdminContentListItemResponse> adminListContent(PublishStatus publishStatus,
             ContentType contentType, String title, int page, int size) {
@@ -115,7 +118,10 @@ public class ContentService {
         return toDetailResponse(content, true);
     }
 
-    /** Admin: unpublish content (PUBLISHED → DRAFT). Instantly removed from public catalog. */
+    /**
+     * Admin: unpublish content (PUBLISHED → DRAFT). Instantly removed from public
+     * catalog.
+     */
     @Transactional
     public ContentDetailResponse unpublishContent(UUID contentId) {
         Content content = contentRepository.findById(contentId)

@@ -42,7 +42,8 @@ public class AdminLicenseController {
     }
 
     /**
-     * Revoke a playback license. licenseStatus becomes REVOKED; all future signed URL requests must fail.
+     * Revoke a playback license. licenseStatus becomes REVOKED; all future signed
+     * URL requests must fail.
      */
     @PostMapping("/{licenseId}/revoke")
     public ResponseEntity<PlaybackLicenseResponse> revokeLicense(@PathVariable UUID licenseId) {

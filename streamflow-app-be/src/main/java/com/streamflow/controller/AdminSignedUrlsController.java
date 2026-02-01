@@ -11,7 +11,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Admin: signed URL audit trail (debug only). Metadata only, no active signed URLs.
+ * Admin: signed URL audit trail (debug only). Metadata only, no active signed
+ * URLs.
  */
 @RestController
 @RequestMapping("/api/admin/signed-urls")
@@ -24,7 +25,8 @@ public class AdminSignedUrlsController {
     }
 
     /**
-     * List signed URL records with filters. Order: createdAt DESC. Paginated. Metadata only.
+     * List signed URL records with filters. Order: createdAt DESC. Paginated.
+     * Metadata only.
      */
     @GetMapping
     public ResponseEntity<PagedResponse<SignedUrlAuditItemResponse>> listSignedUrls(

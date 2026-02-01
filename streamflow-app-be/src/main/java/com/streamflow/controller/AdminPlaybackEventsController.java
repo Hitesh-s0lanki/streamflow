@@ -25,7 +25,8 @@ public class AdminPlaybackEventsController {
     }
 
     /**
-     * List playback events with filters. Order: newest first. Paginated (limit = size).
+     * List playback events with filters. Order: newest first. Paginated (limit =
+     * size).
      */
     @GetMapping
     public ResponseEntity<PagedResponse<PlaybackEventLogItemResponse>> listPlaybackEvents(

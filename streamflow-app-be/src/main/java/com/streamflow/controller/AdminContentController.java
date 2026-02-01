@@ -40,7 +40,8 @@ public class AdminContentController {
     }
 
     /**
-     * Update content metadata (title, description, releaseYear, rating, posterUrl, thumbnailUrl).
+     * Update content metadata (title, description, releaseYear, rating, posterUrl,
+     * thumbnailUrl).
      * contentType must not be changed.
      */
     @PatchMapping("/{contentId}")

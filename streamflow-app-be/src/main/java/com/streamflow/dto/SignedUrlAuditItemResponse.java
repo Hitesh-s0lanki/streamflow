@@ -10,7 +10,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Admin signed URL audit item: metadata only (no active signed URL for safer demo logs).
+ * Admin signed URL audit item: metadata only (no active signed URL for safer
+ * demo logs).
  */
 @Getter
 @Setter

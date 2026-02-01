@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * Request body for PATCH /api/admin/content/{contentId}. Editable metadata only;
+ * Request body for PATCH /api/admin/content/{contentId}. Editable metadata
+ * only;
  * contentType must not be changed.
  */
 @Getter

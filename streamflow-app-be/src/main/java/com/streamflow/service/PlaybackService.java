@@ -38,7 +38,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Playback and DRM foundation: licenses, signed manifest/segment URLs, revocation.
+ * Playback and DRM foundation: licenses, signed manifest/segment URLs,
+ * revocation.
  * Playback access requires a valid license; VideoAsset must be READY.
  */
 @Service
@@ -80,8 +81,10 @@ public class PlaybackService {
     }
 
     /**
-     * Request playback license for a video. One ACTIVE license per user per VideoAsset;
-     * returns existing active license or creates a new one. VideoAsset must exist and be READY.
+     * Request playback license for a video. One ACTIVE license per user per
+     * VideoAsset;
+     * returns existing active license or creates a new one. VideoAsset must exist
+     * and be READY.
      */
     @Transactional
     public PlaybackLicenseResponse requestLicense(String userId, String deviceId, UUID videoAssetId) {
@@ -115,7 +118,8 @@ public class PlaybackService {
     }
 
     /**
-     * Validate license before serving playback URLs. License must be ACTIVE, not expired, and match userId.
+     * Validate license before serving playback URLs. License must be ACTIVE, not
+     * expired, and match userId.
      */
     @Transactional(readOnly = true)
     public PlaybackLicenseResponse validateLicense(UUID licenseId, String userId) {
@@ -134,7 +138,8 @@ public class PlaybackService {
     }
 
     /**
-     * Generate short-lived signed manifest URL. Valid license required; SignedPlaybackUrl record persisted for audit.
+     * Generate short-lived signed manifest URL. Valid license required;
+     * SignedPlaybackUrl record persisted for audit.
      */
     @Transactional
     public SignedPlaybackUrlResponse generateManifestUrl(String userId, UUID videoAssetId, UUID licenseId) {
@@ -144,11 +149,12 @@ public class PlaybackService {
         if (manifestUrl == null || manifestUrl.isBlank()) {
             throw new BadRequestException("VideoAsset has no manifest URL configured");
         }
-        if (manifestUrl.startsWith("http") && !manifestUrl.contains("s3.amazonaws.com") && !manifestUrl.contains(".s3.")) {
+        if (manifestUrl.startsWith("http") && !manifestUrl.contains("s3.amazonaws.com")
+                && !manifestUrl.contains(".s3.")) {
             throw new BadRequestException("Manifest URL must be an S3 key or S3 object URL for signed playback");
         }
-        S3StorageService s3 = s3StorageService.orElseThrow(() ->
-                new BadRequestException("S3 is not configured; signed playback URLs are not available"));
+        S3StorageService s3 = s3StorageService.orElseThrow(
+                () -> new BadRequestException("S3 is not configured; signed playback URLs are not available"));
         String manifestKey = manifestUrl.startsWith("http") ? extractS3KeyFromUrl(manifestUrl) : manifestUrl;
         if (manifestKey.startsWith("http")) {
             throw new BadRequestException("Manifest URL must be an S3 key or S3 object URL for signed playback");
@@ -170,10 +176,12 @@ public class PlaybackService {
     }
 
     /**
-     * Generate short-lived signed segment URL. Valid license required; segment path must belong to a VideoVariant.
+     * Generate short-lived signed segment URL. Valid license required; segment path
+     * must belong to a VideoVariant.
      */
     @Transactional
-    public SignedPlaybackUrlResponse generateSegmentUrl(String userId, UUID videoAssetId, UUID licenseId, String segmentPath) {
+    public SignedPlaybackUrlResponse generateSegmentUrl(String userId, UUID videoAssetId, UUID licenseId,
+            String segmentPath) {
         PlaybackLicense license = requireValidLicenseForAsset(userId, videoAssetId, licenseId);
         VideoAsset asset = license.getVideoAsset();
         List<VideoVariant> variants = videoVariantRepository.findByVideoAssetIdOrderBySortOrderAsc(videoAssetId);
@@ -188,8 +196,8 @@ public class PlaybackService {
         if (!belongsToVariant) {
             throw new BadRequestException("Segment path does not belong to any VideoVariant of this asset");
         }
-        S3StorageService s3 = s3StorageService.orElseThrow(() ->
-                new BadRequestException("S3 is not configured; signed playback URLs are not available"));
+        S3StorageService s3 = s3StorageService.orElseThrow(
+                () -> new BadRequestException("S3 is not configured; signed playback URLs are not available"));
         var result = s3.generatePresignedGetUrl(normalizedSegment, signedUrlExpirationMinutes);
         SignedPlaybackUrl record = new SignedPlaybackUrl();
         record.setVideoAsset(asset);
@@ -207,7 +215,8 @@ public class PlaybackService {
     }
 
     /**
-     * Revoke a playback license (admin). All future signed URL requests for this license will fail.
+     * Revoke a playback license (admin). All future signed URL requests for this
+     * license will fail.
      */
     @Transactional
     public PlaybackLicenseResponse revokeLicense(UUID licenseId) {
@@ -240,7 +249,10 @@ public class PlaybackService {
                 .build();
     }
 
-    /** Admin: signed URL audit trail (metadata only, no active signed URLs in response). */
+    /**
+     * Admin: signed URL audit trail (metadata only, no active signed URLs in
+     * response).
+     */
     @Transactional(readOnly = true)
     public PagedResponse<SignedUrlAuditItemResponse> adminListSignedUrls(UUID videoAssetId, String urlType,
             Instant from, Instant to, int page, int size) {
@@ -272,7 +284,10 @@ public class PlaybackService {
                 .build();
     }
 
-    /** Admin: list sampled playback events. Order: newest first. Paginated (limit = size). */
+    /**
+     * Admin: list sampled playback events. Order: newest first. Paginated (limit =
+     * size).
+     */
     @Transactional(readOnly = true)
     public PagedResponse<PlaybackEventLogItemResponse> adminListPlaybackEvents(String userId, UUID videoAssetId,
             PlaybackEventType eventType, Instant from, Instant to, int page, int size) {
@@ -336,13 +351,16 @@ public class PlaybackService {
 
     /** If manifest URL is a full S3 URL, extract key; otherwise return as-is. */
     private static String extractS3KeyFromUrl(String url) {
-        if (url == null || !url.startsWith("http")) return url;
+        if (url == null || !url.startsWith("http"))
+            return url;
         int idx = url.indexOf(".s3.");
-        if (idx == -1) idx = url.indexOf("s3.amazonaws.com/");
+        if (idx == -1)
+            idx = url.indexOf("s3.amazonaws.com/");
         if (idx != -1) {
             int pathStart = url.indexOf("/", idx) + 1;
             int bucketEnd = url.indexOf("/", pathStart);
-            if (bucketEnd != -1) return url.substring(bucketEnd + 1);
+            if (bucketEnd != -1)
+                return url.substring(bucketEnd + 1);
         }
         return url;
     }

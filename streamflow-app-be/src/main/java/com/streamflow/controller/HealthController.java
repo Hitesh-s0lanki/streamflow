@@ -51,18 +51,22 @@ public class HealthController {
         // Database connectivity
         boolean dbUp = checkDatabase();
         checks.put("database", dbUp ? "up" : "down");
-        if (!dbUp) allUp = false;
+        if (!dbUp)
+            allUp = false;
 
-        // Kafka: config present (and optionally connectivity - we only check config for simplicity)
+        // Kafka: config present (and optionally connectivity - we only check config for
+        // simplicity)
         boolean kafkaConfigPresent = kafkaBootstrapServers != null && !kafkaBootstrapServers.isBlank();
         checks.put("kafka", kafkaConfigPresent ? "up" : "down");
-        if (!kafkaConfigPresent) allUp = false;
+        if (!kafkaConfigPresent)
+            allUp = false;
 
         // S3: if enabled, config must be present
         if (s3Enabled) {
             boolean s3ConfigPresent = s3Bucket != null && !s3Bucket.isBlank();
             checks.put("s3", s3ConfigPresent ? "up" : "down");
-            if (!s3ConfigPresent) allUp = false;
+            if (!s3ConfigPresent)
+                allUp = false;
         } else {
             checks.put("s3", "not_configured");
         }

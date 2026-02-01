@@ -81,7 +81,9 @@ public class IngestionService {
                         .build());
     }
 
-    /** Admin: list ingestion jobs with filters. Order: createdAt DESC. Paginated. */
+    /**
+     * Admin: list ingestion jobs with filters. Order: createdAt DESC. Paginated.
+     */
     @Transactional(readOnly = true)
     public PagedResponse<IngestionStatusResponse> adminListJobs(IngestionStatus jobStatus,
             UUID videoAssetId, UUID contentId, Instant from, Instant to, int page, int size) {
@@ -102,7 +104,10 @@ public class IngestionService {
                 .build();
     }
 
-    /** Admin: get ingestion job detail (includes rawS3Key, errorMessage, processedAt). */
+    /**
+     * Admin: get ingestion job detail (includes rawS3Key, errorMessage,
+     * processedAt).
+     */
     @Transactional(readOnly = true)
     public IngestionStatusResponse adminGetJobDetail(UUID jobId) {
         IngestionJob job = ingestionJobRepository.findById(jobId)

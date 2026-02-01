@@ -30,11 +30,17 @@ public interface IngestionJobRepository extends JpaRepository<IngestionJob, UUID
 
     Optional<IngestionJob> findFirstByVideoAssetIdOrderByCreatedAtDesc(UUID videoAssetId);
 
-    /** Count distinct video assets with given job status (e.g. READY for ingestion readiness). */
+    /**
+     * Count distinct video assets with given job status (e.g. READY for ingestion
+     * readiness).
+     */
     @Query("SELECT COUNT(DISTINCT j.videoAsset.id) FROM IngestionJob j WHERE j.jobStatus = :status")
     long countDistinctVideoAssetIdsByJobStatus(@Param("status") IngestionStatus status);
 
-    /** Admin list: filters jobStatus, videoAssetId, contentId, date range. Order: createdAt DESC. */
+    /**
+     * Admin list: filters jobStatus, videoAssetId, contentId, date range. Order:
+     * createdAt DESC.
+     */
     @Query("SELECT j FROM IngestionJob j JOIN j.videoAsset v WHERE (:jobStatus IS NULL OR j.jobStatus = :jobStatus)"
             + " AND (:videoAssetId IS NULL OR v.id = :videoAssetId)"
             + " AND (:contentId IS NULL OR v.content.id = :contentId)"

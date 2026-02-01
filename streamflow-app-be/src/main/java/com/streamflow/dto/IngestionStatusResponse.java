@@ -11,7 +11,8 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * Response for GET /api/ingestion/{videoAssetId} and admin ingestion job detail.
+ * Response for GET /api/ingestion/{videoAssetId} and admin ingestion job
+ * detail.
  */
 @Getter
 @Setter
