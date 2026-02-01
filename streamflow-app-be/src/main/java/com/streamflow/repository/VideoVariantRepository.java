@@ -13,4 +13,6 @@ public interface VideoVariantRepository extends JpaRepository<VideoVariant, UUID
     List<VideoVariant> findByVideoAssetIdOrderByBitrateKbpsAsc(UUID videoAssetId);
 
     boolean existsByVideoAssetIdAndResolution(UUID videoAssetId, String resolution);
+
+    boolean existsByVideoAssetIdAndSortOrder(UUID videoAssetId, Integer sortOrder);
 }

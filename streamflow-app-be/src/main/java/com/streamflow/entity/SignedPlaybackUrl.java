@@ -15,13 +15,19 @@ import java.time.Instant;
 @Entity
 @Table(name = "signed_playback_url", indexes = {
         @Index(name = "idx_signed_playback_url_video_asset_id", columnList = "video_asset_id"),
-        @Index(name = "idx_signed_playback_url_expires_at", columnList = "expires_at")
+        @Index(name = "idx_signed_playback_url_expires_at", columnList = "expires_at"),
+        @Index(name = "idx_signed_playback_url_license_id", columnList = "playback_license_id")
 })
 public class SignedPlaybackUrl extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "video_asset_id", nullable = false)
     private VideoAsset videoAsset;
+
+    /** Optional link to license for audit trail. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "playback_license_id")
+    private PlaybackLicense playbackLicense;
 
     @Column(name = "signed_url", nullable = false, columnDefinition = "TEXT")
     private String signedUrl;

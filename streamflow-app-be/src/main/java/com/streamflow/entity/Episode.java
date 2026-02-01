@@ -37,7 +37,8 @@ public class Episode extends BaseEntity {
     @Column(name = "thumbnail_url", length = 1024)
     private String thumbnailUrl;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-    @JoinColumn(name = "video_asset_id", nullable = false, unique = true)
+    /** Optional in Phase 1; required when playback/ingestion is enabled. */
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+    @JoinColumn(name = "video_asset_id", nullable = true, unique = true)
     private VideoAsset videoAsset;
 }

@@ -30,6 +30,9 @@ public class IngestionJob extends BaseEntity {
     @Column(name = "raw_s3_key", length = 1024)
     private String rawS3Key;
 
+    @Column(name = "content_type", length = 128)
+    private String contentType;
+
     @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 

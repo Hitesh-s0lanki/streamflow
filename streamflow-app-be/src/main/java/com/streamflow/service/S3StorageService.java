@@ -1,5 +1,6 @@
 package com.streamflow.service;
 
+import com.streamflow.dto.UploadUrlResponse;
 import com.streamflow.exception.S3UploadException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,6 +41,7 @@ public class S3StorageService {
     public static final String DEFAULT_VIDEOS_PREFIX = "videos/";
 
     private final S3Client s3Client;
+    private final S3Presigner s3Presigner;
 
     @Value("${streamflow.aws.s3.bucket:}")
     private String bucket;
@@ -48,18 +55,20 @@ public class S3StorageService {
     @Value("${streamflow.aws.s3.max-file-size-mb:512}")
     private long maxFileSizeMb;
 
-    public S3StorageService(S3Client s3Client) {
+    public S3StorageService(S3Client s3Client, S3Presigner s3Presigner) {
         this.s3Client = s3Client;
+        this.s3Presigner = s3Presigner;
     }
 
     /**
      * Uploads a file from an input stream to S3.
      *
-     * @param key         object key (e.g. "images/abc.jpg" or "videos/xyz.mp4")
-     * @param inputStream source stream (will not be closed by this method)
-     * @param contentLength length in bytes; use -1 if unknown (may affect multipart behaviour)
-     * @param contentType  e.g. "image/jpeg", "video/mp4"
-     * @param metadata    optional custom metadata; can be null
+     * @param key           object key (e.g. "images/abc.jpg" or "videos/xyz.mp4")
+     * @param inputStream   source stream (will not be closed by this method)
+     * @param contentLength length in bytes; use -1 if unknown (may affect multipart
+     *                      behaviour)
+     * @param contentType   e.g. "image/jpeg", "video/mp4"
+     * @param metadata      optional custom metadata; can be null
      * @return the S3 object key (same as input key, or generated)
      * @throws S3UploadException if bucket is not configured, or S3 returns an error
      */
@@ -102,9 +111,10 @@ public class S3StorageService {
 
     /**
      * Uploads a multipart file (e.g. from a controller) as an image or video.
-     * Key is generated using prefix (images/ or videos/) and original filename with a UUID to avoid collisions.
+     * Key is generated using prefix (images/ or videos/) and original filename with
+     * a UUID to avoid collisions.
      *
-     * @param file        the uploaded file
+     * @param file            the uploaded file
      * @param useVideosPrefix true to use videos prefix, false for images
      * @return the S3 object key
      * @throws S3UploadException if upload fails or file is empty/too large
@@ -178,14 +188,100 @@ public class S3StorageService {
     }
 
     /**
-     * Returns the public or pre-signed URL for an object if you use a custom domain or CDN.
-     * This implementation returns the default S3 object URL (bucket + key). Override or use
+     * Generates a presigned PUT URL for client-side upload. Caller provides the raw
+     * S3 key
+     * (e.g. from generateRawVideoKey). Backend never handles raw video bytes.
+     *
+     * @param rawS3Key          object key (e.g. videos/raw/{videoAssetId}/{uuid})
+     * @param expirationMinutes validity in minutes (max 7 days for standard S3)
+     * @return uploadUrl, rawS3Key, expiration
+     */
+    public UploadUrlResponse generatePresignedPutUrl(String rawS3Key, int expirationMinutes) {
+        ensureBucketConfigured();
+        String normalizedKey = normalizeKey(rawS3Key);
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(bucket)
+                .key(normalizedKey)
+                .build();
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(expirationMinutes))
+                .putObjectRequest(putRequest)
+                .build();
+        var presigned = s3Presigner.presignPutObject(presignRequest);
+        Instant expiration = Instant.now().plus(Duration.ofMinutes(expirationMinutes));
+        log.info("Generated presigned PUT URL for bucket={}, key={}, expires={}", bucket, normalizedKey, expiration);
+        return UploadUrlResponse.builder()
+                .uploadUrl(presigned.url().toString())
+                .rawS3Key(normalizedKey)
+                .expiration(expiration)
+                .build();
+    }
+
+    /**
+     * Generates a unique raw video S3 key for a video asset. Use this when creating
+     * upload URL so the client uploads to a known key to be passed to
+     * confirm-upload.
+     */
+    public String generateRawVideoKey(UUID videoAssetId) {
+        String prefix = StringUtils.hasText(videosPrefix) ? videosPrefix : DEFAULT_VIDEOS_PREFIX;
+        return prefix + "raw/" + videoAssetId + "/" + UUID.randomUUID();
+    }
+
+    /**
+     * Returns the public or pre-signed URL for an object if you use a custom domain
+     * or CDN.
+     * This implementation returns the default S3 object URL (bucket + key).
+     * Override or use
      * a separate URL builder if you use CloudFront or custom domain.
      */
     public String getObjectUrl(String key) {
         ensureBucketConfigured();
         String normalizedKey = normalizeKey(key);
         return String.format("https://%s.s3.amazonaws.com/%s", bucket, normalizedKey);
+    }
+
+    /**
+     * Generates a short-lived presigned GET URL for secure playback (manifest or
+     * segment).
+     *
+     * @param key               S3 object key (e.g. manifest path or segment path)
+     * @param expirationMinutes validity in minutes (keep short for playback)
+     * @return presigned URL and expiration instant
+     */
+    public PresignedGetUrlResult generatePresignedGetUrl(String key, int expirationMinutes) {
+        ensureBucketConfigured();
+        String normalizedKey = normalizeKey(key);
+        GetObjectRequest getRequest = GetObjectRequest.builder()
+                .bucket(bucket)
+                .key(normalizedKey)
+                .build();
+        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(expirationMinutes))
+                .getObjectRequest(getRequest)
+                .build();
+        var presigned = s3Presigner.presignGetObject(presignRequest);
+        Instant expiration = Instant.now().plus(Duration.ofMinutes(expirationMinutes));
+        log.info("Generated presigned GET URL for bucket={}, key={}, expires={}", bucket, normalizedKey, expiration);
+        return new PresignedGetUrlResult(presigned.url().toString(), expiration);
+    }
+
+    /** Result of presigned GET URL generation for playback. */
+    public static final class PresignedGetUrlResult {
+        private final String url;
+        private final Instant expiresAt;
+
+        public PresignedGetUrlResult(String url, Instant expiresAt) {
+            this.url = url;
+            this.expiresAt = expiresAt;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public Instant getExpiresAt() {
+            return expiresAt;
+        }
     }
 
     private void ensureBucketConfigured() {

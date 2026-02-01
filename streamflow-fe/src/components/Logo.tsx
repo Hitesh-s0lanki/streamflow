@@ -8,7 +8,11 @@ interface LogoProps {
   className?: string;
 }
 
-export default function Logo({ size = "md", variant = "light", className }: LogoProps) {
+export default function Logo({
+  size = "md",
+  variant = "light",
+  className,
+}: LogoProps) {
   const sizeClasses = {
     sm: "text-lg",
     md: "text-2xl",
@@ -19,10 +23,10 @@ export default function Logo({ size = "md", variant = "light", className }: Logo
     <Link
       href="/"
       className={cn(
-        "font-bold flex items-center gap-2",
+        "font-bold flex items-center",
         sizeClasses[size],
         variant === "dark" && "text-white",
-        className,
+        className
       )}
     >
       <Image

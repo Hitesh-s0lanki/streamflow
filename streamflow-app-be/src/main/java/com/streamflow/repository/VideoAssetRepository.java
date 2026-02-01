@@ -23,4 +23,8 @@ public interface VideoAssetRepository extends JpaRepository<VideoAsset, UUID> {
 
     @Query("SELECT v FROM VideoAsset v LEFT JOIN FETCH v.variants LEFT JOIN FETCH v.spriteSheets WHERE v.id = :id")
     Optional<VideoAsset> findByIdWithVariantsAndSpriteSheets(@Param("id") UUID id);
+
+    boolean existsByContentId(UUID contentId);
+
+    boolean existsByEpisodeId(UUID episodeId);
 }

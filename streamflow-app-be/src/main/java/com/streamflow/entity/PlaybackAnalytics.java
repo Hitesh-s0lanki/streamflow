@@ -14,7 +14,8 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "playback_analytics", indexes = {
         @Index(name = "idx_playback_analytics_video_asset_id", columnList = "video_asset_id"),
-        @Index(name = "idx_playback_analytics_period", columnList = "video_asset_id, period_start")
+        @Index(name = "idx_playback_analytics_period", columnList = "video_asset_id, period_start"),
+        @Index(name = "uk_playback_analytics_video_period", columnList = "video_asset_id, period_start", unique = true)
 })
 public class PlaybackAnalytics extends BaseEntity {
 
@@ -42,4 +43,23 @@ public class PlaybackAnalytics extends BaseEntity {
 
     @Column(name = "buffering_rate", precision = 5, scale = 4)
     private BigDecimal bufferingRate;
+
+    /**
+     * Count of COMPLETED events (for completionRate = totalCompleted / totalPlays).
+     */
+    @Column(name = "total_completed")
+    private Long totalCompleted;
+
+    /**
+     * Count of BUFFERING events (for bufferingRate = totalBuffering / totalPlays).
+     */
+    @Column(name = "total_buffering")
+    private Long totalBuffering;
+
+    /**
+     * Sum of watch time from COMPLETED events (currentTimeSeconds);
+     * avgWatchTimeSeconds = totalWatchTimeSeconds / totalCompleted.
+     */
+    @Column(name = "total_watch_time_seconds")
+    private Long totalWatchTimeSeconds;
 }

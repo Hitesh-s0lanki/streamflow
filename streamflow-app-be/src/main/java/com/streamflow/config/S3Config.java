@@ -14,6 +14,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
 import software.amazon.awssdk.services.s3.S3Configuration;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.net.URI;
 
@@ -69,6 +70,30 @@ public class S3Config {
         log.info("S3 client configured: region={}, endpointOverride={}", region,
                 endpointOverride != null && !endpointOverride.isBlank() ? endpointOverride : "default");
         return client;
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "streamflow.aws.s3.enabled", havingValue = "true")
+    public S3Presigner s3Presigner() {
+        AwsCredentialsProvider credentials = resolveCredentials();
+        S3Presigner.Builder builder = S3Presigner.builder().region(Region.of(region));
+        if (credentials != null) {
+            builder.credentialsProvider(credentials);
+        }
+        if (endpointOverride != null && !endpointOverride.isBlank()) {
+            try {
+                builder.endpointOverride(URI.create(endpointOverride));
+            } catch (Exception e) {
+                log.warn("Invalid S3 endpoint override for presigner '{}': {}", endpointOverride, e.getMessage());
+            }
+        }
+        if (pathStyleAccess) {
+            builder.serviceConfiguration(
+                    S3Configuration.builder().pathStyleAccessEnabled(true).build());
+        }
+        S3Presigner presigner = builder.build();
+        log.info("S3 presigner configured: region={}", region);
+        return presigner;
     }
 
     private AwsCredentialsProvider resolveCredentials() {

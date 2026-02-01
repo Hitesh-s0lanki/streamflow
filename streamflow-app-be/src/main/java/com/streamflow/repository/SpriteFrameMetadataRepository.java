@@ -15,4 +15,6 @@ public interface SpriteFrameMetadataRepository extends JpaRepository<SpriteFrame
             Integer timeOffsetSeconds);
 
     List<SpriteFrameMetadata> findBySpriteSheetIdOrderByTimeOffsetSecondsAsc(UUID spriteSheetId);
+
+    boolean existsBySpriteSheetIdAndFrameIndex(UUID spriteSheetId, Integer frameIndex);
 }

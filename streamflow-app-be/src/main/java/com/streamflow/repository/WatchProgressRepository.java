@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,6 +21,16 @@ public interface WatchProgressRepository extends JpaRepository<WatchProgress, UU
 
     @Query("SELECT wp FROM WatchProgress wp JOIN FETCH wp.videoAsset WHERE wp.userId = :userId AND wp.completed = false ORDER BY wp.lastWatchedAt DESC")
     List<WatchProgress> findContinueWatching(@Param("userId") String userId, Pageable pageable);
+
+    /**
+     * Continue watching: completed = false, lastWatchedAt within time window,
+     * ordered by lastWatchedAt DESC.
+     */
+    @Query("SELECT wp FROM WatchProgress wp JOIN FETCH wp.videoAsset va LEFT JOIN FETCH va.content LEFT JOIN FETCH va.episode "
+            +
+            "WHERE wp.userId = :userId AND wp.completed = false AND wp.lastWatchedAt >= :since ORDER BY wp.lastWatchedAt DESC")
+    List<WatchProgress> findContinueWatchingSince(@Param("userId") String userId, @Param("since") Instant since,
+            Pageable pageable);
 
     boolean existsByUserIdAndVideoAssetId(String userId, UUID videoAssetId);
 }
