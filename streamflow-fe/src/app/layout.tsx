@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { QueryProvider } from "./providers";
 import "./globals.css";
+import { Toaster } from "sonner";
+import { TRPCReactProvider } from "@/trpc/client";
+import { Analytics } from "@vercel/analytics/next";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-ott-sans",
@@ -37,12 +42,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider
+      signInFallbackRedirectUrl="/"
+      signUpFallbackRedirectUrl="/"
+      signInForceRedirectUrl="/"
+      signUpForceRedirectUrl="/"
+    >
+      <TRPCReactProvider>
+        <html lang="en">
+          <body
+            className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+          >
+            <QueryProvider>
+              <Toaster />
+              {children}
+            </QueryProvider>
+            <Analytics />
+          </body>
+        </html>
+      </TRPCReactProvider>
+    </ClerkProvider>
   );
 }
