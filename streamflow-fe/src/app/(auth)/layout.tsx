@@ -13,12 +13,12 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="grid min-h-screen max-h-screen grid-cols-1 md:grid-cols-2 overflow-hidden">
+    <div className="grid min-h-screen max-h-screen grid-cols-1 md:grid-cols-2 overflow-hidden min-w-0">
       {/* Left: branding (dark) */}
-      <aside className="flex flex-col justify-between bg-neutral-900 px-6 py-8 text-white md:px-10 md:py-12">
+      <aside className="flex flex-col justify-between bg-neutral-900 px-4 py-6 text-white sm:px-6 sm:py-8 md:px-10 md:py-12 min-w-0">
         <Logo size="sm" className="shrink-0 text-white" variant="dark" />
         <div className="hidden md:block">
-          <h2 className="text-2xl font-semibold tracking-tight text-white md:text-3xl">
+          <h2 className="text-xl font-semibold tracking-tight text-white sm:text-2xl md:text-3xl">
             Stream Smarter.
             <br />
             <span className="text-red-400">Securely.</span>
@@ -35,8 +35,8 @@ export default function AuthLayout({
       </aside>
 
       {/* Right: auth form (white) */}
-      <main className="flex flex-col items-center justify-center overflow-y-auto bg-background px-6 py-8 md:px-12 md:py-10">
-        <div className="w-full max-w-[400px]">{children}</div>
+      <main className="flex flex-col items-center justify-center overflow-y-auto bg-background px-4 py-6 sm:px-6 sm:py-8 md:px-12 md:py-10 min-w-0">
+        <div className="w-full max-w-[400px] min-w-0">{children}</div>
       </main>
     </div>
   );

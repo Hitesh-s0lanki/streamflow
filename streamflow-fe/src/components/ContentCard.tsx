@@ -57,7 +57,7 @@ export default function ContentCard({
           router.push(`/content/${contentId}`);
         }
       }}
-      className="content-card group shrink-0 w-[150px] md:w-[185px] cursor-pointer"
+      className="content-card group shrink-0 w-[120px] min-[380px]:w-[140px] sm:w-[150px] md:w-[185px] cursor-pointer snap-start"
     >
       {/* Poster */}
       <div className="relative aspect-2/3 rounded-xl overflow-hidden bg-muted ring-1 ring-black/5 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-black/10 group-hover:-translate-y-1 group-hover:ring-black/10">
@@ -67,7 +67,7 @@ export default function ContentCard({
             alt={title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
-            sizes="185px"
+            sizes="(max-width: 380px) 120px, (max-width: 640px) 150px, 185px"
           />
         ) : (
           <div className="w-full h-full bg-linear-to-br from-muted to-muted-foreground/10 flex items-center justify-center">

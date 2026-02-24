@@ -60,9 +60,9 @@ export default function WatchPage() {
     const message =
       error instanceof Error ? error.message : "Unable to start playback.";
     return (
-      <div className="h-screen bg-black flex flex-col items-center justify-center p-8 text-center">
-        <p className="text-red-400 font-medium mb-2 text-lg">Playback Error</p>
-        <p className="text-white/50 text-sm mb-6 max-w-md">{message}</p>
+      <div className="h-screen bg-black flex flex-col items-center justify-center p-4 sm:p-8 text-center min-w-0">
+        <p className="text-red-400 font-medium mb-2 text-base sm:text-lg">Playback Error</p>
+        <p className="text-white/50 text-sm mb-6 max-w-md px-2">{message}</p>
         <button
           onClick={() => router.back()}
           className="inline-flex items-center gap-2 px-5 py-2 bg-white text-black text-sm font-medium rounded-md hover:bg-white/90 transition-colors"

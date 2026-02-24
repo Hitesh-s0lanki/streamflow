@@ -21,6 +21,12 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: "StreamFlow — Stream Smarter. Securely.",
   description:
@@ -49,9 +55,9 @@ export default function RootLayout({
       signUpForceRedirectUrl="/"
     >
       <TRPCReactProvider>
-        <html lang="en">
+        <html lang="en" className="min-w-0">
           <body
-            className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+            className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased min-w-0`}
           >
             <QueryProvider>
               <Toaster />

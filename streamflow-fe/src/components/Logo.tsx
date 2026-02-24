@@ -14,9 +14,9 @@ export default function Logo({
   className,
 }: LogoProps) {
   const sizeClasses = {
-    sm: "text-lg",
-    md: "text-2xl",
-    lg: "text-3xl md:text-4xl",
+    sm: "text-sm sm:text-base md:text-lg",
+    md: "text-xl sm:text-2xl",
+    lg: "text-2xl sm:text-3xl md:text-4xl",
   };
 
   return (
@@ -34,7 +34,7 @@ export default function Logo({
         alt="StreamFlow"
         width={70}
         height={70}
-        className="shrink-0"
+        className="shrink-0 w-8 h-8 sm:w-9 sm:h-9 md:w-[70px] md:h-[70px]"
       />
       <span>StreamFlow</span>
     </Link>

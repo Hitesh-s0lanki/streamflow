@@ -198,7 +198,7 @@ export function PlayerControls({
       <div className="absolute bottom-0 inset-x-0 h-48 bg-linear-to-t from-black/80 to-transparent pointer-events-none" />
 
       {/* Top bar — back + title */}
-      <div className="relative z-10 flex items-center gap-3 pt-4 px-4 md:px-8 pointer-events-auto">
+      <div className="relative z-10 flex items-center gap-2 sm:gap-3 pt-3 sm:pt-4 px-3 sm:px-4 md:px-8 pointer-events-auto">
         <button
           onClick={() => router.back()}
           className="p-2 rounded-full hover:bg-white/10 transition-colors"
@@ -206,13 +206,13 @@ export function PlayerControls({
         >
           <ArrowLeft className="w-5 h-5 text-white" />
         </button>
-        <h2 className="text-white text-base md:text-lg font-medium truncate">
+        <h2 className="text-white text-sm sm:text-base md:text-lg font-medium truncate min-w-0">
           {title}
         </h2>
       </div>
 
       {/* Center play controls */}
-      <div className="relative z-10 flex items-center justify-center gap-10 pointer-events-none">
+      <div className="relative z-10 flex items-center justify-center gap-6 sm:gap-10 pointer-events-none">
         <button
           onClick={() => onSeek(Math.max(0, currentTime - 10))}
           className="pointer-events-auto p-3 rounded-full hover:bg-white/10 transition-colors"
@@ -222,13 +222,13 @@ export function PlayerControls({
         </button>
         <button
           onClick={onTogglePlay}
-          className="pointer-events-auto p-5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors"
+          className="pointer-events-auto p-4 sm:p-5 rounded-full bg-white/15 hover:bg-white/25 backdrop-blur-sm transition-colors"
           aria-label={playing ? "Pause" : "Play"}
         >
           {playing ? (
-            <Pause className="w-9 h-9 text-white" />
+            <Pause className="w-8 h-8 sm:w-9 sm:h-9 text-white" />
           ) : (
-            <Play className="w-9 h-9 text-white ml-0.5" />
+            <Play className="w-8 h-8 sm:w-9 sm:h-9 text-white ml-0.5" />
           )}
         </button>
         <button
@@ -241,7 +241,7 @@ export function PlayerControls({
       </div>
 
       {/* Bottom controls */}
-      <div className="relative z-10 pb-4 px-4 md:px-8 pointer-events-auto">
+      <div className="relative z-10 pb-3 sm:pb-4 px-3 sm:px-4 md:px-8 pointer-events-auto">
         {/* Seek bar */}
         <div className="relative mb-2">
           {hoverTime !== null && sprites.sheets.length > 0 && (
@@ -295,8 +295,8 @@ export function PlayerControls({
         </div>
 
         {/* Controls bar */}
-        <div className="flex items-center justify-between text-white">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-white">
+          <div className="flex items-center gap-1 sm:gap-2 min-w-0">
             <button
               onClick={onTogglePlay}
               className="p-1.5 hover:bg-white/10 rounded-md transition-colors"
@@ -347,26 +347,26 @@ export function PlayerControls({
               </div>
             </div>
 
-            <span className="text-sm tabular-nums select-none ml-1 text-white/80">
+            <span className="text-xs sm:text-sm tabular-nums select-none ml-0.5 sm:ml-1 text-white/80 shrink-0">
               {formatTime(currentTime)}
               <span className="text-white/40"> / </span>
               {formatTime(duration)}
             </span>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5 sm:gap-1">
             {/* Quality selector */}
             {qualityLevels.length > 0 && onQualityChange && (
               <div className="relative" ref={qualityMenuRef}>
                 <button
                   type="button"
                   onClick={() => setShowQualityMenu((v) => !v)}
-                  className="flex items-center gap-1.5 px-2 py-1.5 hover:bg-white/10 rounded-md transition-colors duration-150 ease-out"
-                  aria-label="Quality"
+                  className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2 py-1.5 hover:bg-white/10 rounded-md transition-colors duration-150 ease-out"
+                  aria-label={`Quality: ${currentQualityLabel}`}
                   aria-expanded={showQualityMenu}
                 >
-                  <Settings2 className="w-5 h-5 text-white/90" />
-                  <span className="text-sm text-white/90 tabular-nums">
+                  <Settings2 className="w-4 h-4 sm:w-5 sm:h-5 text-white/90 shrink-0" />
+                  <span className="text-xs sm:text-sm text-white/90 tabular-nums hidden min-[400px]:inline">
                     {currentQualityLabel}
                   </span>
                 </button>

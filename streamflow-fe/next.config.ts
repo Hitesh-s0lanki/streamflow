@@ -7,13 +7,12 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "streamflow-netflix-demo.s3.ap-south-1.amazonaws.com",
         pathname: "/**",
-        search: "",
+        // omit search so S3 signed URLs with ?X-Amz-* query params are allowed
       },
       {
         protocol: "https",
         hostname: "*",
         pathname: "/**",
-        search: "",
       },
     ],
   },

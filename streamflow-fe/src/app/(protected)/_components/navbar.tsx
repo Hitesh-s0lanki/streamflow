@@ -13,7 +13,7 @@ const NAV_LINKS = [
 const Navbar = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 min-h-[3.5rem] sm:h-16 max-w-6xl items-center gap-2 sm:gap-4 px-3 sm:px-4 md:px-6 min-w-0">
         <div className="mr-auto flex items-center gap-3 overflow-hidden">
           <div className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-lg">
             <Play className="text-primary size-4" />
