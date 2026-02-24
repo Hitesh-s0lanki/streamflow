@@ -17,6 +17,8 @@ defaults:
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: dummy-key-for-ci
     steps:
       - uses: actions/checkout@v4
 

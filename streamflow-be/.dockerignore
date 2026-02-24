@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+*.iml
+.vscode
+*.swp
+*.swo
+*~
+
+# Build output (we build inside Docker)
+target/
+
+# Test and local
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Docs and misc (not needed in image)
+*.md
+!README.md
+
+# CI / Docker (avoid recursion)
+.github
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+*.dockerfile
