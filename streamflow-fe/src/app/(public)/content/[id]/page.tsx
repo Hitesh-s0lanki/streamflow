@@ -2,6 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Play, Calendar, Clock, Star, Film, Tv } from "lucide-react";
 import { getContentDetail } from "@/lib/api/content";
@@ -174,10 +175,12 @@ export default function ContentDetailPage() {
       {/* Backdrop */}
       <div className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden -mt-[72px]">
         {backdropUrl ? (
-          <img
+          <Image
             src={backdropUrl}
             alt={content.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="100vw"
           />
         ) : (
           <div className="w-full h-full bg-muted" />
@@ -191,12 +194,14 @@ export default function ContentDetailPage() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Poster */}
           <div className="shrink-0 hidden md:block">
-            <div className="w-[220px] aspect-poster rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/10">
+            <div className="relative w-[220px] aspect-poster rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/10">
               {posterUrl ? (
-                <img
+                <Image
                   src={posterUrl}
                   alt={content.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  sizes="220px"
                 />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">

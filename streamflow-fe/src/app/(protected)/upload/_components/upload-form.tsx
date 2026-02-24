@@ -31,7 +31,6 @@ const UploadForm = () => {
     handleSelectMatch,
     handleManualImages,
     handleProceedToUpload,
-    handleBackToReview,
     handleReset,
   } = useContentGeneration();
 

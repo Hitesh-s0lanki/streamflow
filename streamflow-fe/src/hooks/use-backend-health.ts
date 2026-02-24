@@ -30,7 +30,8 @@ export function useBackendHealth() {
   }, []);
 
   useEffect(() => {
-    runCheck();
+    const id = setTimeout(runCheck, 0);
+    return () => clearTimeout(id);
   }, [runCheck]);
 
   useEffect(() => {

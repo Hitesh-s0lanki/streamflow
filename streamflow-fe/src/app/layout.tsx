@@ -5,6 +5,7 @@ import { QueryProvider } from "./providers";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "@/trpc/client";
+import { Analytics } from "@vercel/analytics/next";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-ott-sans",
@@ -56,6 +57,7 @@ export default function RootLayout({
               <Toaster />
               {children}
             </QueryProvider>
+            <Analytics />
           </body>
         </html>
       </TRPCReactProvider>

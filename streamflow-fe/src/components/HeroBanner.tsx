@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { Play, Info, Film, Tv } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -28,10 +29,12 @@ export default function HeroBanner({ content }: HeroBannerProps) {
       {/* Backdrop */}
       <div className="absolute inset-0">
         {backdropUrl ? (
-          <img
+          <Image
             src={backdropUrl}
             alt={content.title}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="100vw"
           />
         ) : (
           <div className="w-full h-full bg-linear-to-br from-muted to-muted/60" />

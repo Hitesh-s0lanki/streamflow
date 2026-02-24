@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Play, Plus, Info } from "lucide-react";
 import type { ContentCatalogItem, ContinueWatchingItem } from "@/types/content";
@@ -61,11 +62,12 @@ export default function ContentCard({
       {/* Poster */}
       <div className="relative aspect-2/3 rounded-xl overflow-hidden bg-muted ring-1 ring-black/5 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-black/10 group-hover:-translate-y-1 group-hover:ring-black/10">
         {resolvedImageUrl ? (
-          <img
+          <Image
             src={resolvedImageUrl}
             alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="185px"
           />
         ) : (
           <div className="w-full h-full bg-linear-to-br from-muted to-muted-foreground/10 flex items-center justify-center">

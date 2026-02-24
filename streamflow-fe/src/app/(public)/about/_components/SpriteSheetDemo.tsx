@@ -45,7 +45,7 @@ export function SpriteSheetDemo({
   const timelineRef = useRef<HTMLDivElement>(null);
   const scrubAreaRef = useRef<HTMLDivElement>(null);
   const [scrubPercent, setScrubPercent] = useState<number | null>(null);
-  const [isHovering, setIsHovering] = useState(false);
+  const [, setIsHovering] = useState(false);
   const frame = useSpriteFrame(scrubPercent, sprite);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
