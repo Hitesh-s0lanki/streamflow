@@ -1,276 +1,145 @@
-# 🎬 Streamflow
+# Streamflow
 
-**Streamflow** is a demo OTT platform built to showcase **Netflix-style video streaming architecture**, including **secure playback (DRM-style flow)**, **adaptive streaming**, **thumbnail previews**, and **efficient event-driven backend communication**.
+**Building an OTT platform from curiosity, not just code.**
 
-This project is intended for **engineering demonstration and system design learning purposes**.
+Streamflow is a full-stack OTT streaming platform built to understand how modern video platforms work — adaptive streaming, sprite sheet previews, cloud-based media handling, and secure delivery.
 
----
-
-## 🚀 Project Purpose
-
-The objective of Streamflow is to demonstrate how large-scale OTT platforms like Netflix deliver video content **securely, efficiently, and at scale**, using **industry-standard technologies**.
-
-Streamflow focuses on:
-
-- Secure content playback architecture
-- Adaptive bitrate streaming
-- Preview thumbnails on video seek
-- Event-driven backend design
-- CDN-first video delivery
+![Streamflow Home](images/home.png)
 
 ---
 
-## 🧠 What Streamflow Demonstrates
+## It started with a simple question…
 
-- Netflix-style adaptive streaming (HLS / MPEG-DASH)
-- DRM-style license-based playback flow
-- Encrypted video segment delivery
-- Thumbnail previews during seek
-- Efficient frontend → backend → CDN communication
-- Event streaming for playback analytics
+While scrolling Instagram one day, I saw a short reel explaining how **sprite sheets** work in OTT platforms. It showed how Netflix-style video previews appear instantly when you hover on the timeline. That one concept made me pause.
 
----
+Then I asked myself:
 
-## 🏗️ High-Level Architecture
+- How does that actually work?
+- How does the video automatically adjust quality?
+- How do platforms stream smoothly even on slow internet?
+- What happens behind the scenes after you upload a video?
 
-```
-Client (Next.js Frontend)
-│
-├── Authentication (JWT)
-│
-├── Playback Request
-│
-├── DRM License Request
-│
-├── Signed CDN URL Access
-│
-▼
-CDN (Encrypted Video Segments)
-```
-
-Backend services communicate asynchronously using **Kafka** for scalable event handling.
+Instead of just searching for answers… I built **Streamflow**.
 
 ---
 
-## 🧑‍💻 Tech Stack
+## What is Streamflow?
 
-### Frontend
+Streamflow is a full-stack OTT streaming platform built to deeply understand how modern video platforms work. It's not just about playing videos. It's about:
 
-- **Next.js** (React-based framework)
-- TypeScript
-- Tailwind CSS / shadcn-ui
-- Shaka Player or Video.js (DRM-capable player)
-- Client-side adaptive streaming logic
+- **Performance optimization**
+- **Adaptive streaming**
+- **Smart preview thumbnails (Sprite Sheets)**
+- **Cloud-based media handling**
+- **Secure content delivery**
 
----
-
-### Backend
-
-- **Java Spring Boot**
-- Spring Security (JWT-based authentication)
-- REST APIs for content, auth, and playback
-- DRM license simulation service
-- Signed URL generation for CDN access
+![Content catalog and detail](images/content.png)
 
 ---
 
-### Event Streaming & Messaging
+## Core features
 
-- **Apache Kafka**
-- Playback events:
-  - Play
-  - Pause
-  - Seek
-  - Buffering
-  - Quality switch
+### 1. Adaptive streaming (HLS)
 
-- Kafka consumers for:
-  - Analytics
-  - Monitoring
-  - Future recommendation logic
+Streamflow uses **HLS (HTTP Live Streaming)** with automatic quality adjustment. When you watch a video: if your internet is fast you get HD; if it slows down it switches to lower quality; when it improves, quality goes back up. All without you noticing.
 
----
+- No buffering interruptions  
+- Optimized bandwidth usage  
+- Better mobile experience  
+- Real-world OTT behavior  
 
-### Media & Storage
+![Watch page — HLS playback](images/watch.png)
 
-- **AWS S3**
-  - Encrypted video segments
-  - Thumbnail sprite sheets
-  - Media metadata
+### 2. Sprite sheets (the feature that started it all)
 
-- FFmpeg
-  - Transcoding
-  - Segmentation (HLS / DASH)
-  - Thumbnail generation
+When you hover over a video timeline and see preview thumbnails instantly — that's sprite sheet technology. Instead of loading many small images, one large image is generated with multiple frames in a grid, and the player shows the correct frame instantly.
+
+- Faster preview loading  
+- Fewer server requests  
+- Reduced bandwidth usage  
+- Better user experience  
+
+![Sprite sheet grid example](images/sprite.jpg)
 
 ---
 
-### CDN & Delivery
+## Behind the scenes
 
-- AWS CloudFront (or Cloudflare)
-- Signed URL based access
-- Cache-first video delivery
-- Backend never streams video bytes
+1. **Video upload** — Large videos are uploaded efficiently (chunked & optimized).
+2. **Processing pipeline** — Once uploaded: multiple resolutions are generated (for adaptive streaming), HLS playlists are created, sprite sheets are generated, and metadata is stored.
+3. **Smart playback** — When a user presses play: HLS automatically selects the best quality, sprite sheet previews activate, and streaming adjusts in real time.
 
----
-
-### Security & DRM (Demo-Level)
-
-- AES-based video encryption
-- License-based playback authorization
-- Widevine-style DRM flow (demo simulation)
-- Secure media pipeline via browser player
-
-> ⚠️ Note
-> Streamflow does **not** implement Netflix proprietary DRM.
-> It demonstrates **industry-standard DRM architecture concepts**.
+![Upload flow](images/upload.png)
 
 ---
 
-### Infrastructure & DevOps (Optional / Demo Scope)
+## Vision for Streamflow
 
-- Docker (service containerization)
-- AWS IAM (access control)
-- Environment-based configuration
-- CI-ready project structure
+This project is evolving toward:
 
-### Git hooks (Husky)
+- DRM-based content protection  
+- AI-powered recommendations  
+- Video analytics tracking  
+- Cloud-native microservices  
+- Production-level scalability  
 
-Pre-commit hooks run **lint** and **build** for the frontend before each commit. To install hooks, run from the repo root:
+*It's not just a side project. It's an engineering journey.*
+
+---
+
+## For non-technical readers
+
+Imagine watching Netflix. Now imagine opening Netflix's engine room — seeing how videos change quality automatically, load instantly, show preview thumbnails, avoid buffering, and scale to millions of users. That's what Streamflow explores.
+
+---
+
+## Tech stack
+
+| Layer      | Stack |
+|-----------|--------|
+| **Frontend** | Next.js 16, React 19, tRPC, TanStack Query, HLS.js, Framer Motion, Tailwind CSS, Clerk (auth) |
+| **Streaming** | HLS (HTTP Live Streaming), adaptive bitrate |
+| **Media** | Sprite sheets for timeline previews, multi-resolution encoding |
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 20+
+- npm, yarn, pnpm, or bun
+
+### Run the frontend
 
 ```bash
+cd streamflow-fe
 npm install
+npm run dev
 ```
 
-This runs the `prepare` script and configures Git to use `.husky/` for hooks. The pre-commit hook runs `streamflow-fe` lint and build; the commit is blocked if either fails.
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
----
-
-## 🎥 Streaming Technology
-
-- Streaming Protocol: **MPEG-DASH / HLS**
-- Video Segmentation: 2–6 seconds per chunk
-- Multiple Bitrates: Adaptive quality switching
-- Player: Shaka Player / Video.js
-
----
-
-## 🖼️ Preview Thumbnails (Netflix-Style Seek Preview)
-
-- Pre-generated thumbnail sprite sheets
-- Time-index based preview rendering
-- No runtime frame extraction
-- Instant preview during seek bar hover
-
----
-
-## 📱 Frontend Pages
-
-1. **Start Screen**
-   - Platform introduction
-   - Get Started / Sign In CTA
-
-2. **Login Screen**
-   - User authentication
-   - Demo login support
-
-3. **Home Screen**
-   - Movies & Series listing
-   - Featured content banner
-   - Horizontal carousels
-
-4. **Preview Page**
-   - Content metadata
-   - Thumbnail previews
-   - Play CTA
-
-5. **Video Player Page**
-   - Fullscreen playback
-   - Adaptive streaming
-   - Loader & buffer visualization
-   - Seek preview thumbnails
-
----
-
-## 🔁 Navigation Flow
+### Project structure
 
 ```
-Start Screen
-→ Login
-→ Home (Movies & Series)
-→ Preview Page
-→ Video Player
+streamflow/
+├── streamflow-fe/     # Next.js frontend (catalog, watch, upload, about)
+├── images/            # Screenshots and assets for docs
+└── Readme.md
 ```
 
 ---
 
-## 📦 Content Processing Pipeline
+## Learn more
 
-```
-Upload Video
-↓
-FFmpeg Transcoding (Multiple Bitrates)
-↓
-Segmenting (HLS / DASH)
-↓
-Encryption
-↓
-Thumbnail Sprite Generation
-↓
-Upload to AWS S3
-↓
-Delivery via CDN
-```
+- **In-app About page** — Open the app and visit `/about` for the full story, sprite sheet demo, and inspiration.
+- **YouTube** — [Sprite sheets & OTT concepts](https://www.youtube.com/watch?v=-JtjQ-OA7XE) — the video that inspired this project.
 
 ---
 
-## 📊 Event-Driven Playback Analytics (Kafka)
+> *The best way to understand technology is to build it.*
 
-Example events:
+One small Instagram reel led to: **Curiosity → Research → Architecture → Implementation → Optimization.** Streamflow exists because of that belief.
 
-- `VIDEO_PLAY_STARTED`
-- `VIDEO_BUFFERING`
-- `VIDEO_SEEK`
-- `QUALITY_CHANGED`
-- `VIDEO_COMPLETED`
-
-These events enable:
-
-- Playback analytics
-- QoE monitoring
-- Future recommendation demos
-
----
-
-## ❌ What Streamflow Does NOT Do
-
-- Does not replicate Netflix proprietary algorithms
-- Does not bypass DRM systems
-- Does not allow video downloads
-- Not intended for production deployment
-
----
-
-## 📄 Legal & Educational Disclaimer
-
-> Streamflow is a **technical demonstration project** for learning and portfolio use only.
-> Netflix, Widevine, AWS, and other referenced technologies are trademarks of their respective owners.
-> No proprietary code or algorithms are used.
-
----
-
-## 🌱 Future Enhancements
-
-- Multi-profile user support
-- Recommendation engine demo
-- Subtitle & audio track switching
-- License expiration handling
-- Playback analytics dashboard
-- DRM provider abstraction layer
-
----
-
-## 👨‍💻 Author
-
-Built by **Hitesh**
-Software Engineer | Builder
+**Built with curiosity. Engineered for depth. Designed to explore the future of streaming.**

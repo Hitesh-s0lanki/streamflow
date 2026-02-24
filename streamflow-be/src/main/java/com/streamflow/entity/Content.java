@@ -6,13 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-/**
- * Root catalog entity: a Movie or Series visible in the UI (home, search,
- * preview).
- */
+/* Content entity */
 @Getter
 @Setter
 @Entity
@@ -53,14 +47,7 @@ public class Content extends BaseEntity {
     @Column(name = "duration_seconds")
     private Integer durationSeconds;
 
-    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("seasonNumber ASC")
-    private List<SeriesSeason> seasons = new ArrayList<>();
-
-    /**
-     * For MOVIE: single video asset. For SERIES: no direct link; use Episode →
-     * VideoAsset.
-     */
+    /* Video asset for the content in case of movie */
     @OneToOne(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private VideoAsset videoAsset;
 }

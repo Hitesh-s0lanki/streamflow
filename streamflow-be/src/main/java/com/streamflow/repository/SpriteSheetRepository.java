@@ -2,21 +2,19 @@ package com.streamflow.repository;
 
 import com.streamflow.entity.SpriteSheet;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Repository for SpriteSheet entity. A video asset can have multiple sprite
+ * sheets; use findAllByVideoAssetIdOrderBySheetIndexAsc for ordered list.
+ */
+@Repository
 public interface SpriteSheetRepository extends JpaRepository<SpriteSheet, UUID> {
 
-    List<SpriteSheet> findByVideoAssetIdOrderByStartTimeSecondsAsc(UUID videoAssetId);
+    List<SpriteSheet> findAllByVideoAssetIdOrderBySheetIndexAsc(UUID videoAssetId);
 
-    @Query("SELECT s FROM SpriteSheet s WHERE s.videoAsset.id = :videoAssetId AND :timeSeconds >= s.startTimeSeconds AND :timeSeconds < s.endTimeSeconds")
-    Optional<SpriteSheet> findSheetCoveringTime(@Param("videoAssetId") UUID videoAssetId,
-            @Param("timeSeconds") int timeSeconds);
-
-    @Query("SELECT s FROM SpriteSheet s LEFT JOIN FETCH s.frameMetadata WHERE s.videoAsset.id = :videoAssetId ORDER BY s.startTimeSeconds")
-    List<SpriteSheet> findByVideoAssetIdWithFrameMetadata(@Param("videoAssetId") UUID videoAssetId);
+    boolean existsByVideoAssetId(UUID videoAssetId);
 }

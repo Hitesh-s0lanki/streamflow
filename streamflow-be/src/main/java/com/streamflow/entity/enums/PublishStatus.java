@@ -1,9 +1,17 @@
 package com.streamflow.entity.enums;
 
-/**
- * Visibility of content in the catalog (draft vs published).
- */
+/* Enum for publish status */
 public enum PublishStatus {
-    DRAFT,
-    PUBLISHED
+    DRAFT("draft"),
+    PUBLISHED("published");
+
+    private final String value;
+
+    PublishStatus(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }

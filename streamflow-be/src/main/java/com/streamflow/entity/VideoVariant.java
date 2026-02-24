@@ -4,9 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * One ABR rendition of a video (resolution, bitrate, codec, segment path).
- */
+/* Video variant entity */
 @Getter
 @Setter
 @Entity

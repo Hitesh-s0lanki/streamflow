@@ -5,15 +5,17 @@
 
 export type ContentType = "MOVIE" | "SERIES";
 
-/** GET /api/content — catalog listing (PUBLISHED only). */
+export type PublishStatus = "DRAFT" | "PUBLISHED";
+
+/** GET /api/content — catalog listing (minimal fields for cards/grids). */
 export interface ContentCatalogItem {
   id: string;
   title: string;
   contentType: ContentType;
-  posterUrl: string | null;
   thumbnailUrl: string | null;
+  publishStatus: PublishStatus;
   releaseYear: number | null;
-  durationSeconds: number | null;
+  createdAt: string;
 }
 
 /** GET /api/content/{contentId} — full content detail (for hero/detail page). */
@@ -26,11 +28,10 @@ export interface ContentDetail {
   rating: string | null;
   posterUrl: string | null;
   thumbnailUrl: string | null;
-  publishStatus: string;
+  publishStatus: PublishStatus;
   durationSeconds: number | null;
   createdAt: string;
   updatedAt: string;
-  seasons?: unknown[];
 }
 
 /** GET /api/watch-progress/continue — continue watching row item. */

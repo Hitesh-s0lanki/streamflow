@@ -10,8 +10,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * MappedSuperclass for all entities. Provides common fields: id (UUID),
- * createdAt, updatedAt, optional status.
+ * Base entity for all entities.
  */
 @Getter
 @Setter
@@ -31,6 +30,6 @@ public abstract class BaseEntity {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    @Column(name = "status", length = 32)
-    private String status;
+    @Column(name = "status", length = 32, nullable = false)
+    private String status = "ACTIVE";
 }

@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Play, Info } from "lucide-react";
+import { Play, Info, Film, Tv } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { ContentDetail } from "@/types/content";
+import { useMediaUrl } from "@/hooks/use-media-url";
 
 function formatDuration(seconds: number | null): string {
   if (seconds == null || seconds <= 0) return "";
@@ -18,11 +19,13 @@ interface HeroBannerProps {
 }
 
 export default function HeroBanner({ content }: HeroBannerProps) {
-  const backdropUrl = content.posterUrl ?? content.thumbnailUrl ?? "";
+  const backdropKey = content.posterUrl ?? content.thumbnailUrl;
+  const backdropUrl = useMediaUrl(backdropKey);
   const duration = formatDuration(content.durationSeconds ?? null);
 
   return (
-    <div className="relative h-[80vh] md:h-[90vh] w-full overflow-hidden">
+    <section className="relative h-[70vh] md:h-[80vh] w-full overflow-hidden -mt-[72px]">
+      {/* Backdrop */}
       <div className="absolute inset-0">
         {backdropUrl ? (
           <img
@@ -31,45 +34,78 @@ export default function HeroBanner({ content }: HeroBannerProps) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full bg-muted" />
+          <div className="w-full h-full bg-linear-to-br from-muted to-muted/60" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+
+        {/* Light-theme gradient overlays */}
+        <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-white/90 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-white via-white/75 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-white via-white/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-linear-to-t from-background to-transparent" />
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-12 pb-24 md:pb-32">
+      {/* Content */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-16 pb-28 md:pb-36">
         <div className="max-w-2xl animate-slide-up">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4 leading-tight">
+          <div className="flex items-center gap-2 mb-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider backdrop-blur-sm">
+              {content.contentType === "MOVIE" ? (
+                <>
+                  <Film className="h-3 w-3" />
+                  Movie
+                </>
+              ) : (
+                <>
+                  <Tv className="h-3 w-3" />
+                  Series
+                </>
+              )}
+            </span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-3 leading-tight tracking-tight">
             {content.title}
           </h1>
 
-          <div className="flex items-center gap-3 text-sm md:text-base text-muted-foreground mb-4">
+          <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
             {content.rating && (
-              <span className="text-primary font-semibold">{content.rating}</span>
+              <span className="px-2 py-0.5 rounded border border-muted-foreground/30 text-xs font-medium">
+                {content.rating}
+              </span>
             )}
             {content.releaseYear != null && <span>{content.releaseYear}</span>}
             {duration && (
               <>
-                <span>•</span>
+                <span className="text-muted-foreground/40">|</span>
                 <span>{duration}</span>
               </>
             )}
           </div>
 
           {content.description && (
-            <p className="text-base md:text-lg text-foreground/80 mb-6 line-clamp-3 max-w-xl">
+            <p className="text-base md:text-lg text-foreground/70 mb-8 line-clamp-3 max-w-xl leading-relaxed">
               {content.description}
             </p>
           )}
 
-          <div className="flex items-center gap-4">
-            <Button variant="hero" size="lg" asChild>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="hero"
+              size="lg"
+              className="rounded-full px-8 shadow-lg shadow-primary/25"
+              asChild
+            >
               <Link href={`/content/${content.id}`}>
                 <Play className="h-5 w-5 fill-current" />
-                Play
+                Play Now
               </Link>
             </Button>
-            <Button variant="heroSecondary" size="lg" asChild>
+            <Button
+              variant="heroSecondary"
+              size="lg"
+              className="rounded-full px-8"
+              asChild
+            >
               <Link href={`/content/${content.id}`}>
                 <Info className="h-5 w-5" />
                 More Info
@@ -78,6 +114,6 @@ export default function HeroBanner({ content }: HeroBannerProps) {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

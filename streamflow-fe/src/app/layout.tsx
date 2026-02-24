@@ -3,6 +3,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { QueryProvider } from "./providers";
 import "./globals.css";
+import { Toaster } from "sonner";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-ott-sans",
@@ -45,13 +47,18 @@ export default function RootLayout({
       signInForceRedirectUrl="/"
       signUpForceRedirectUrl="/"
     >
-      <html lang="en">
-        <body
-          className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
-        >
-          <QueryProvider>{children}</QueryProvider>
-        </body>
-      </html>
+      <TRPCReactProvider>
+        <html lang="en">
+          <body
+            className={`${plusJakartaSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+          >
+            <QueryProvider>
+              <Toaster />
+              {children}
+            </QueryProvider>
+          </body>
+        </html>
+      </TRPCReactProvider>
     </ClerkProvider>
   );
 }

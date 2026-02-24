@@ -24,7 +24,7 @@ export default function ContentRow({
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
-    const scrollAmount = scrollRef.current.clientWidth * 0.8;
+    const scrollAmount = scrollRef.current.clientWidth * 0.75;
     const newPosition =
       direction === "left"
         ? scrollRef.current.scrollLeft - scrollAmount
@@ -42,26 +42,33 @@ export default function ContentRow({
   if (items.length === 0) return null;
 
   return (
-    <div className="relative group/row py-4">
-      <h2 className="text-xl md:text-2xl font-semibold text-foreground mb-4 px-4 md:px-12">
-        {title}
-      </h2>
+    <section className="relative group/row py-5">
+      <div className="flex items-baseline justify-between px-4 md:px-12 mb-4">
+        <h2 className="text-lg md:text-xl font-semibold text-foreground tracking-tight">
+          {title}
+        </h2>
+        <span className="text-xs text-muted-foreground tabular-nums">
+          {items.length} {items.length === 1 ? "title" : "titles"}
+        </span>
+      </div>
+
       <div className="relative">
         {showLeftArrow && (
           <button
             type="button"
             onClick={() => scroll("left")}
-            className="absolute left-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-r from-background to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-start pl-2"
+            className="absolute left-0 top-0 bottom-10 z-10 w-14 bg-linear-to-r from-background via-background/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-start pl-1.5"
           >
-            <div className="h-10 w-10 rounded-full bg-muted/80 flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronLeft className="h-6 w-6 text-foreground" />
+            <div className="h-10 w-10 rounded-full bg-white shadow-md border border-border/60 flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronLeft className="h-5 w-5 text-foreground" />
             </div>
           </button>
         )}
+
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex gap-3 overflow-x-auto hide-scrollbar px-4 md:px-12 pb-4"
+          className="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar px-4 md:px-12 pb-2"
         >
           {items.map((item) => (
             <ContentCard
@@ -75,18 +82,19 @@ export default function ContentRow({
             />
           ))}
         </div>
+
         {showRightArrow && (
           <button
             type="button"
             onClick={() => scroll("right")}
-            className="absolute right-0 top-0 bottom-0 z-10 w-12 bg-gradient-to-l from-background to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-end pr-2"
+            className="absolute right-0 top-0 bottom-10 z-10 w-14 bg-linear-to-l from-background via-background/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-end pr-1.5"
           >
-            <div className="h-10 w-10 rounded-full bg-muted/80 flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronRight className="h-6 w-6 text-foreground" />
+            <div className="h-10 w-10 rounded-full bg-white shadow-md border border-border/60 flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronRight className="h-5 w-5 text-foreground" />
             </div>
           </button>
         )}
       </div>
-    </div>
+    </section>
   );
 }
