@@ -58,11 +58,11 @@ jobs:
             ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}
             ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}-${{ github.sha }}
 
-      # - name: Trigger Render deploy
-      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      #   env:
-      #     FULL_IMAGE: ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}
-      #   run: |
-      #     echo "Triggering Render deploy with image: $FULL_IMAGE"
-      #     ENCODED_IMG_URL=$(python3 -c "import urllib.parse, os; print(urllib.parse.quote(os.environ['FULL_IMAGE'], safe=''))")
-      #     curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}&imgURL=${ENCODED_IMG_URL}"
+      - name: Trigger Render deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          FULL_IMAGE: ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+        run: |
+          echo "Triggering Render deploy with image: $FULL_IMAGE"
+          ENCODED_IMG_URL=$(python3 -c "import urllib.parse, os; print(urllib.parse.quote(os.environ['FULL_IMAGE'], safe=''))")
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}&imgURL=${ENCODED_IMG_URL}"
