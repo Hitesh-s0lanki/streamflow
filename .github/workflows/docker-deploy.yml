@@ -1,0 +1,68 @@
+# Docker build, push to GHCR, and deploy — main branch only.
+# Uses streamflow-be/Dockerfile. Image is pushed only on push to main.
+name: Docker Deploy (Backend)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "streamflow-be/**"
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  docker-deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: |
+          if [ -f streamflow-be/VERSION ]; then
+            VERSION=$(cat streamflow-be/VERSION)
+          else
+            VERSION=$(sed -n 's/.*<version>\([^<]*\)<\/version>.*/\1/p' streamflow-be/pom.xml | head -1)
+          fi
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./streamflow-be
+          file: ./streamflow-be/Dockerfile
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          platforms: linux/amd64
+          tags: |
+            ${{ secrets.IMAGE_NAME }}:latest
+            ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+            ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}-${{ github.sha }}
+
+      # - name: Trigger Render deploy
+      #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      #   env:
+      #     FULL_IMAGE: ${{ secrets.IMAGE_NAME }}:${{ steps.version.outputs.version }}
+      #   run: |
+      #     echo "Triggering Render deploy with image: $FULL_IMAGE"
+      #     ENCODED_IMG_URL=$(python3 -c "import urllib.parse, os; print(urllib.parse.quote(os.environ['FULL_IMAGE'], safe=''))")
+      #     curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}&imgURL=${ENCODED_IMG_URL}"
