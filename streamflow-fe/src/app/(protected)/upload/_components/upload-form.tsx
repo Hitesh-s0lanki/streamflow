@@ -46,15 +46,15 @@ const UploadForm = () => {
   };
 
   return (
-    <div className="flex w-full px-4 py-6 lg:py-12 justify-center">
+    <div className="flex w-full px-3 sm:px-4 py-4 sm:py-6 lg:py-12 justify-center min-w-0">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full max-w-5xl"
+        className="w-full max-w-5xl min-w-0"
       >
         {/* Header */}
-        <div className="mb-8 w-full flex flex-row items-center gap-4">
+        <div className="mb-6 sm:mb-8 w-full flex flex-row items-start sm:items-center gap-3 sm:gap-4">
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -64,7 +64,7 @@ const UploadForm = () => {
               damping: 15,
               delay: 0.1,
             }}
-            className="bg-primary/10 p-3 flex size-16 items-center justify-center rounded-2xl"
+            className="bg-primary/10 p-2.5 sm:p-3 flex size-12 sm:size-16 items-center justify-center rounded-xl sm:rounded-2xl shrink-0"
           >
             <Clapperboard className="text-primary size-8" />
           </motion.div>
@@ -73,7 +73,7 @@ const UploadForm = () => {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-foreground text-lg font-bold tracking-tight sm:text-3xl"
+              className="text-foreground text-lg font-bold tracking-tight sm:text-2xl md:text-3xl min-w-0"
             >
               {headerTitle}
             </motion.h1>
@@ -81,7 +81,7 @@ const UploadForm = () => {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-muted-foreground text-sm pr-5"
+              className="text-muted-foreground text-sm pr-2 sm:pr-5"
             >
               {headerSubtitle}
             </motion.p>

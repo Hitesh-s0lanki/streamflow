@@ -11,8 +11,8 @@ const navLinkClass =
 
 export default function Navbar() {
   return (
-    <header className="sticky top-0 z-50 w-full">
-      <div className="mx-auto flex h-16 max-w-[1600px] items-center justify-between gap-4 px-4 md:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <div className="mx-auto flex h-14 min-h-[3.5rem] sm:h-16 max-w-[1600px] items-center justify-between gap-2 sm:gap-4 px-3 sm:px-4 md:px-6 lg:px-8">
         <Logo size="sm" />
 
         <div className="flex items-center gap-1 sm:gap-2">
@@ -36,7 +36,7 @@ export default function Navbar() {
                 <Button
                   variant="hero"
                   size="default"
-                  className="rounded-full px-4 py-2 text-sm font-semibold sm:px-5"
+                  className="rounded-full px-3 py-2 text-xs font-semibold min-[400px]:px-4 min-[400px]:text-sm sm:px-5"
                 >
                   Sign In
                 </Button>
@@ -45,7 +45,7 @@ export default function Navbar() {
                 <Button
                   variant="outline"
                   size="default"
-                  className="rounded-full border-border/80 px-4 py-2 text-sm font-medium sm:px-5"
+                  className="rounded-full border-border/80 px-3 py-2 text-xs font-medium min-[400px]:px-4 min-[400px]:text-sm sm:px-5"
                 >
                   Sign Up
                 </Button>

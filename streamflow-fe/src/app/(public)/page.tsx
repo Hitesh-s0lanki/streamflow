@@ -17,9 +17,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 function HomeSkeleton() {
   return (
     <>
-      <div className="relative h-[70vh] md:h-[80vh] w-full overflow-hidden -mt-[72px]">
+      <div className="relative min-h-[50vh] h-[70vh] md:h-[80vh] w-full overflow-hidden -mt-14 md:-mt-[72px]">
         <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
-        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-16 pb-20 md:pb-28 max-w-2xl">
+        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-16 pb-20 md:pb-28 max-w-2xl">
           <Skeleton className="h-7 w-20 mb-4 rounded-full" />
           <Skeleton className="h-12 w-3/4 mb-3" />
           <Skeleton className="h-5 w-1/3 mb-4" />
@@ -31,13 +31,13 @@ function HomeSkeleton() {
         </div>
       </div>
 
-      <div className="px-4 md:px-12 py-8 space-y-10">
+      <div className="px-3 sm:px-4 md:px-12 py-6 sm:py-8 space-y-8 sm:space-y-10">
         {[1, 2].map((row) => (
           <div key={row}>
-            <Skeleton className="h-6 w-44 mb-5" />
-            <div className="flex gap-4">
+            <Skeleton className="h-6 w-44 mb-4 sm:mb-5" />
+            <div className="flex gap-2 sm:gap-4">
               {Array.from({ length: 7 }).map((_, i) => (
-                <div key={i} className="shrink-0 w-[150px] md:w-[185px]">
+                <div key={i} className="shrink-0 w-[120px] min-[380px]:w-[140px] sm:w-[150px] md:w-[185px]">
                   <Skeleton className="w-full aspect-2/3 rounded-xl" />
                   <Skeleton className="h-4 w-3/4 mt-2.5" />
                   <Skeleton className="h-3 w-1/2 mt-1" />
@@ -173,7 +173,7 @@ export default function Home() {
             </div>
           ) : null}
 
-          <div className="relative -mt-20 md:-mt-28 z-10 pb-20 space-y-1">
+          <div className="relative -mt-16 sm:-mt-20 md:-mt-28 z-10 pb-12 sm:pb-20 space-y-1">
             {continueWatching.length > 0 && (
               <ContentRow
                 title="Continue Watching"

@@ -42,9 +42,9 @@ export default function ContentRow({
   if (items.length === 0) return null;
 
   return (
-    <section className="relative group/row py-5">
-      <div className="flex items-baseline justify-between px-4 md:px-12 mb-4">
-        <h2 className="text-lg md:text-xl font-semibold text-foreground tracking-tight">
+    <section className="relative group/row py-4 sm:py-5">
+      <div className="flex items-baseline justify-between gap-2 px-3 sm:px-4 md:px-12 mb-3 sm:mb-4">
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold text-foreground tracking-tight truncate min-w-0">
           {title}
         </h2>
         <span className="text-xs text-muted-foreground tabular-nums">
@@ -57,10 +57,11 @@ export default function ContentRow({
           <button
             type="button"
             onClick={() => scroll("left")}
-            className="absolute left-0 top-0 bottom-10 z-10 w-14 bg-linear-to-r from-background via-background/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-start pl-1.5"
+            className="absolute left-0 top-0 bottom-10 z-10 w-10 sm:w-14 bg-linear-to-r from-background via-background/80 to-transparent opacity-100 sm:opacity-0 sm:group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-start pl-1 sm:pl-1.5"
+            aria-label="Scroll left"
           >
-            <div className="h-10 w-10 rounded-full bg-white shadow-md border border-border/60 flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronLeft className="h-5 w-5 text-foreground" />
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white shadow-md border border-border/60 flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
             </div>
           </button>
         )}
@@ -68,7 +69,7 @@ export default function ContentRow({
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex gap-3 md:gap-4 overflow-x-auto hide-scrollbar px-4 md:px-12 pb-2"
+          className="flex gap-2 sm:gap-3 md:gap-4 overflow-x-auto hide-scrollbar px-3 sm:px-4 md:px-12 pb-2 snap-x snap-mandatory [scroll-padding-inline:0.75rem]"
         >
           {items.map((item) => (
             <ContentCard
@@ -87,10 +88,11 @@ export default function ContentRow({
           <button
             type="button"
             onClick={() => scroll("right")}
-            className="absolute right-0 top-0 bottom-10 z-10 w-14 bg-linear-to-l from-background via-background/80 to-transparent opacity-0 group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-end pr-1.5"
+            className="absolute right-0 top-0 bottom-10 z-10 w-10 sm:w-14 bg-linear-to-l from-background via-background/80 to-transparent opacity-100 sm:opacity-0 sm:group-hover/row:opacity-100 transition-opacity duration-300 flex items-center justify-end pr-1 sm:pr-1.5"
+            aria-label="Scroll right"
           >
-            <div className="h-10 w-10 rounded-full bg-white shadow-md border border-border/60 flex items-center justify-center hover:bg-muted transition-colors">
-              <ChevronRight className="h-5 w-5 text-foreground" />
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-white shadow-md border border-border/60 flex items-center justify-center hover:bg-muted transition-colors">
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-foreground" />
             </div>
           </button>
         )}

@@ -38,9 +38,9 @@ function DetailSkeleton() {
       <div className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden">
         <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
       </div>
-      <div className="max-w-5xl mx-auto px-4 md:px-8 -mt-32 relative z-10 pb-16">
-        <div className="flex flex-col md:flex-row gap-8">
-          <Skeleton className="w-[200px] h-[300px] rounded-lg shrink-0" />
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-8 -mt-32 sm:-mt-40 relative z-10 pb-10 sm:pb-16">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
+          <Skeleton className="w-[200px] h-[300px] rounded-lg shrink-0 hidden md:block" />
           <div className="flex-1 space-y-4 pt-4">
             <Skeleton className="h-10 w-3/4" />
             <div className="flex gap-3">
@@ -173,7 +173,7 @@ export default function ContentDetailPage() {
       <Navbar />
 
       {/* Backdrop */}
-      <div className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden -mt-[72px]">
+      <div className="relative h-[50vh] md:h-[60vh] w-full overflow-hidden -mt-14 sm:-mt-18 md:-mt-[72px]">
         {backdropUrl ? (
           <Image
             src={backdropUrl}
@@ -185,13 +185,13 @@ export default function ContentDetailPage() {
         ) : (
           <div className="w-full h-full bg-muted" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-background/80 via-transparent to-transparent" />
       </div>
 
       {/* Content area */}
-      <div className="max-w-5xl mx-auto px-4 md:px-8 -mt-40 relative z-10 pb-16">
-        <div className="flex flex-col md:flex-row gap-8">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 md:px-8 -mt-32 sm:-mt-40 relative z-10 pb-10 sm:pb-16">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8">
           {/* Poster */}
           <div className="shrink-0 hidden md:block">
             <div className="relative w-[220px] aspect-poster rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/10">
@@ -225,7 +225,7 @@ export default function ContentDetailPage() {
               </Badge>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
               {content.title}
             </h1>
 
@@ -237,8 +237,8 @@ export default function ContentDetailPage() {
               </p>
             )}
 
-            <div className="flex items-center gap-4 mt-8">
-              <Button variant="hero" size="lg" asChild>
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-6 sm:mt-8">
+              <Button variant="hero" size="lg" className="w-full sm:w-auto" asChild>
                 <Link href={`/watch/${content.id}`}>
                   <Play className="h-5 w-5 fill-current" />
                   Play
@@ -247,6 +247,7 @@ export default function ContentDetailPage() {
               <Button
                 variant="heroSecondary"
                 size="lg"
+                className="w-full sm:w-auto"
                 onClick={() => router.back()}
               >
                 <ArrowLeft className="h-5 w-5" />
@@ -257,7 +258,7 @@ export default function ContentDetailPage() {
             <Separator className="my-8" />
 
             {/* Additional info */}
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 text-sm">
+            <div className="grid grid-cols-1 min-[400px]:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 text-sm">
               <div>
                 <p className="text-muted-foreground mb-1">Content Type</p>
                 <p className="text-foreground font-medium">
